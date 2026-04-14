@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Starter</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1 class="logo">My Dashboard</h1>
+        <nav>
+          <ul class="menu">
+            <li class="active">总览</li>
+            <li>销售</li>
+            <li>用户</li>
+            <li>订单</li>
+            <li>设置</li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <h2>业务总览</h2>
+            <p id="today"></p>
+          </div>
+          <button id="refreshBtn" class="btn">刷新数据</button>
+        </header>
+
+        <section class="cards">
+          <article class="card">
+            <h3>今日销售额</h3>
+            <p id="sales" class="value">¥0</p>
+            <span class="hint positive">+8.3%</span>
+          </article>
+          <article class="card">
+            <h3>新注册用户</h3>
+            <p id="users" class="value">0</p>
+            <span class="hint positive">+4.1%</span>
+          </article>
+          <article class="card">
+            <h3>订单数</h3>
+            <p id="orders" class="value">0</p>
+            <span class="hint negative">-1.4%</span>
+          </article>
+          <article class="card">
+            <h3>转化率</h3>
+            <p id="rate" class="value">0%</p>
+            <span class="hint positive">+0.9%</span>
+          </article>
+        </section>
+
+        <section class="grid">
+          <article class="panel">
+            <h3>近7天销售趋势</h3>
+            <svg class="chart" viewBox="0 0 360 140" aria-label="line chart">
+              <polyline
+                id="trendLine"
+                fill="none"
+                stroke="#4f46e5"
+                stroke-width="4"
+                points="20,100 70,88 120,95 170,72 220,64 270,56 320,46"
+              />
+              <line x1="20" y1="120" x2="340" y2="120" class="axis" />
+            </svg>
+          </article>
+
+          <article class="panel">
+            <h3>渠道占比</h3>
+            <div class="progress-list">
+              <div class="progress-item">
+                <span>自然流量</span>
+                <div class="track"><i style="width: 62%"></i></div>
+              </div>
+              <div class="progress-item">
+                <span>广告投放</span>
+                <div class="track"><i style="width: 24%"></i></div>
+              </div>
+              <div class="progress-item">
+                <span>私域</span>
+                <div class="track"><i style="width: 14%"></i></div>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <h3>最新订单</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>订单号</th>
+                <th>客户</th>
+                <th>金额</th>
+                <th>状态</th>
+              </tr>
+            </thead>
+            <tbody id="orderRows"></tbody>
+          </table>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
