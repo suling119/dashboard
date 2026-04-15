@@ -55,7 +55,7 @@ class OptimizationPeriod:
     end_date: str
 
 
-OPTIMIZATION_WINDOWS = [5, 8, 10, 14, 21, 25, 30, 35, 40, 50, 100, 150, 200]
+OPTIMIZATION_WINDOWS = [5, 10, 20, 30, 50, 100, 150, 200]
 
 FIXED_OPTIMIZATION_PERIODS = [
     OptimizationPeriod(
@@ -788,7 +788,6 @@ def optimize_strategy_for_period(
     period: OptimizationPeriod,
     strategy_def: Dict[str, Any],
     backtest_cfg: BacktestConfig,
-    top_n_results: int,
     debug_signal_samples: int,
 ) -> Dict[str, Any]:
     """
@@ -830,8 +829,6 @@ def optimize_strategy_for_period(
         na_position="last",
     )
     results_df = results_df.reset_index(drop=True)
-    top_n_df = results_df.head(top_n_results).copy()
-
     if results_df.empty:
         raise RuntimeError(f"{period.label} | {strategy_cfg.name}: optimization results are empty.")
 
@@ -871,7 +868,6 @@ def optimize_strategy_for_period(
 
     return {
         "results_df": results_df,
-        "top_n_df": top_n_df,
         "best_row": best_row,
         "best_params": best_params,
         "best_df": best_df,
@@ -1018,15 +1014,14 @@ def run_optimization_mode(args: argparse.Namespace) -> None:
                 period=period,
                 strategy_def=s,
                 backtest_cfg=backtest_cfg,
-                top_n_results=args.top_n_results,
                 debug_signal_samples=args.debug_signal_samples,
             )
 
-            top_n_path = (
-                f"{args.output_prefix}_{sanitize_token(period.label)}_{strategy_slug}_top_{args.top_n_results}.csv"
+            optimization_csv_path = (
+                f"{args.output_prefix}_{sanitize_token(period.label)}_{strategy_slug}_optimization_results.csv"
             )
-            opt_result["top_n_df"].to_csv(top_n_path, index=False)
-            print(f"Top-{args.top_n_results} optimization results saved: {top_n_path}")
+            opt_result["results_df"].to_csv(optimization_csv_path, index=False)
+            print(f"Optimization results saved: {optimization_csv_path}")
 
             best_trade_path = (
                 f"{args.output_prefix}_{sanitize_token(period.label)}_{strategy_slug}_best_trades.csv"
@@ -1160,7 +1155,7 @@ def parse_args() -> argparse.Namespace:
         "--top-n-results",
         type=int,
         default=10,
-        help="Number of top optimization rows exported to CSV per strategy/period.",
+        help="Unused in optimize mode (kept for backward compatibility).",
     )
     return parser.parse_args()
 
